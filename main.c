@@ -2,11 +2,17 @@
 #include "stdlib.h"
 #include "Passenger.h"
 #include "Registration.h"
-#include "List.h"
+#include "Queue.h"
 
 int main()
     {
-    List* queue = new_list();
-    fill_list(queue);
-    print_list(queue);
+    #ifdef MAKE_LIST
+        List* queue = new_queue();
+    #else
+        Vector* queue = new_queue();
+    #endif
+
+    fill_queue(queue);
+    print_queue(queue);
+    free_queue(queue);
     }
