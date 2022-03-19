@@ -11,18 +11,10 @@ List* new_queue()
     return (List*)calloc(1,sizeof(List));   
     }
 
-void fill_queue(List* queue)
+void create_queue(List* queue)
     {
-    for (size_t i = 0; i < 3; i++)
-        {
-        Passenger* pas = new_Passenger();
-        add_info(pas);
-
-        Registration* reg = new_registration();
-        add_passenger(reg,pas);
-
-        push(queue,reg);
-        }
+    queue->head = NULL;
+    queue->len = 0;
     }
 
 void push(List* queue,Registration* to_push)
@@ -42,6 +34,20 @@ void push(List* queue,Registration* to_push)
             }
         traceback->next = to_push;
         }
+    queue->len++;
+    }
+
+void pop(List* queue)
+    {
+    Registration* tmp = queue->head;
+    queue->head = queue->head->next;
+    free_registration(tmp);
+    queue->len--;
+    }
+
+Registration* peek(List* queue)
+    {
+    return queue->head;
     }
 
 void print_queue(List* queue)
@@ -74,29 +80,34 @@ Vector* new_queue()
     return (Vector*)calloc(1,sizeof(Vector));
     }
 
-void fill_queue(Vector* queue)
+void create_queue(Vector* queue)
     {
     queue->len = 0;
     queue->vector = (Registration**)calloc(queue->len,sizeof(Registration*));
-    for (size_t i = 0; i < 3; i++)
-        {
-        queue->len++;
-        queue->vector = (Registration**)realloc(queue->vector, (queue->len)*(sizeof(Registration*)));
-        queue->vector[i] = (Registration*)calloc(1,sizeof(Registration));
-        
-        Passenger* pas = new_Passenger();
-        add_info(pas);
-
-        Registration* reg = new_registration();
-        add_passenger(reg,pas);
-
-        push(queue,reg);
-        }
     }
 
-void push(Vector* queue,Registration* reg)
+void push(Vector* queue,Registration* to_push)
     {
-    queue->vector[queue->len - 1] = reg;
+    queue->len++;
+    queue->vector = (Registration**)realloc(queue->vector, (queue->len)*(sizeof(Registration*)));
+    queue->vector[queue->len-1] = (Registration*)calloc(1,sizeof(Registration));
+    queue->vector[queue->len - 1] = to_push;
+    }
+
+void pop(Vector* queue)
+    {
+    for(size_t i = 1; i < queue->len; i++)
+        {
+        queue->vector[i-1] = queue->vector[i]; 
+        }
+    free_registration(queue->vector[queue->len]);
+    queue->len--;
+    queue->vector = (Registration**)realloc(queue->vector, (queue->len)*(sizeof(Registration*)));
+    }
+
+Vector* peek(Vector*queue)
+    {
+    return queue->vector[0];
     }
 
 void print_queue(Vector* queue)
@@ -111,7 +122,7 @@ void free_queue(Vector* queue)
     {
     for (size_t i = 0; i < queue->len; i++)
         {
-        free(queue->vector[i]);
+        free_registration(queue->vector[i]);
         }
     free(queue->vector);
     free(queue);
