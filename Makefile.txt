@@ -1,0 +1,14 @@
+test_list: libqueue_list.a main.o passenger.o registration.o table.o
+	cc -std=c99 main.o passenger.o registration.o table.o -L. -lqueue_list -o test -lreadline
+main.o:
+	cc -std=c99 -c -DLIST_USE test.c -o main.o 
+libqueue_list.a: queue.o registration.o table.o
+	ar -rcs libqueue_list.a queue.o registration.o table.o
+queue.o:
+	cc -std=c99 -c -DLIST_USE queue.c -o queue.o
+registration.o:
+	cc -std=c99 -c -DLIST_USE Registration.c -o registration.o
+passenger.o: 
+	cc -std=c99 -c  Passenger.c -o passenger.o -lreadline
+table.o:
+	cc -std=c99 -c -DLIST_USE table.c -o table.o
