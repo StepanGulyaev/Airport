@@ -1,16 +1,17 @@
 #ifndef PASSENGER_H
 #define PASSENGER_H
 
-typedef struct Passenger 
-    {
+
+typedef struct Passenger {
     char* id;
     int ta;
     int ts;
-    } Passenger;
+} Passenger;
 
 void print_info(Passenger*);
-void add_info(Passenger*);
-Passenger* new_Passenger();
+int comp(const Passenger *, const Passenger *);
+int add_info(Passenger**, int*, int*);
+Passenger* new_passenger();
 void free_passenger(Passenger*);
 
 #endif
